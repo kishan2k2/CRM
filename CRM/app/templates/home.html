@@ -61,6 +61,12 @@
 
 <div class="header">
     <h1>Customer Relationship Management APP</h1>
+    {%if username%}
+        <h1>Welcome back {{username}}</h1>
+    {%endif%}
+    {%if not username%}
+        <h1>Login before doing any edit</h1>
+    {%endif%}
     <button class="add-button">Add Data</button>
 </div>
 
