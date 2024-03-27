@@ -1,9 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>Password Reset</title>
     <style>
         /* Add your custom CSS styles here */
         /* For example: */
@@ -51,29 +52,34 @@
     </style>
 </head>
 <body>
-    <div class="navbar">
-        <a href="{%url 'CRM:home'%}">Home</a>
-    </div>
-    
-    <div class="header">
-        <h1>Customer Relationship Management APP</h1>
-    </div>
-    {%if 'error'%}
-    <h1>{{error}}</h1>
-    {%endif%}
-    <h2>Register</h2>
-    <form action="{% url 'CRM:register' %}" method="post">
-        {% csrf_token %}
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="password1">Password:</label><br>
-        <input type="password" id="password1" name="password1"><br>
-        <label for="password2">Confirm Password:</label><br>
-        <input type="password" id="password2" name="password2"><br><br>
-        <input type="submit" value="Register">
-    </form>
-    <p>Already have an account? <a href="{% url 'CRM:login' %}">Login here</a>.</p>
+
+<div class="container">
+    <h2>Password Reset</h2>
+    {% if key %}
+        <form action="{% url 'CRM:confirm' key=key username=username%}" method="post">
+            {% csrf_token %}
+            <label for="otp">Enter OTP, it is sent at {{email}}:</label><br>
+            <input type="number" id="otp" name="otp" required><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    {% elif password%}
+        <form action="{%url 'CRM:setpass' username=username%}" method="post">
+            {% csrf_token %}
+            <label for="password">Password:</label><br>
+            <input type="password" id="password1" name="password1"><br><br>
+            <label for="Confim password"></label><br>
+            <input type="text" id="password2" name="password2"><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    {% else %}
+        <form action="{% url 'CRM:reset' %}" method="post">
+            {% csrf_token %}
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" name="username" required><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+</div>
+
 </body>
 </html>
