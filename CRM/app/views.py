@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages # What is this message for?
 from django.contrib.auth import authenticate, login as auth_login, logout as Logout
 from django.views.decorators.http import require_http_methods
-
+import random, os, smtplib
 # Create your views here.
 username = ""
 def home(request):
@@ -70,8 +70,17 @@ def register(request):
         
     return render(request, 'register.html')
 
-def send_email(email):
-    pass
+def send_email(email, otp):
+    password = os.environ.get('password')
+    subject = 'OTP for the CRM application'
+    text = otp
+    message = 'Subject: {}\n\n{}'.format(subject, text)
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login('payadikishan@gmail.com', password)
+    print("login sucess")
+    server.sendmail('payadikishan@gmail.com', email, message)
+    print("horray")
 
 def reset(request):
     if request.method == 'POST':
@@ -87,8 +96,8 @@ def reset(request):
         email = user.email
         print(email)
         # Random number generation.
-        Random = 123
-        # send_email(email, Random)
+        Random = random.randint(100, 999)
+        send_email(email, Random)
         return render(request, 'reset_pass.html', {
             'key': Random,
             'username': username,
